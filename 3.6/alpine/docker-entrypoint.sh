@@ -65,6 +65,7 @@ rabbitConfigKeys=(
 	default_vhost
 	hipe_compile
 	vm_memory_high_watermark
+	management_definitions_config
 )
 fileConfigKeys=(
 	management_ssl_cacertfile
@@ -86,6 +87,7 @@ declare -A configDefaults=(
 
 	[ssl_fail_if_no_peer_cert]='true'
 	[ssl_verify]='verify_peer'
+	[management_definitions_config]='/etc/rabbitmq/definitions.json'
 )
 
 haveConfig=
@@ -366,7 +368,8 @@ if [ "$1" = 'rabbitmq-server' ] && [ "$shouldWriteConfig" ]; then
 
 		# if definitions file exists, then load it
 		# https://www.rabbitmq.com/management.html#load-definitions
-		managementDefinitionsFile='/etc/rabbitmq/definitions.json'
+		echo "RABBITMQ_MANAGEMENT_DEFINITIONS_CONFIG: ${RABBITMQ_MANAGEMENT_DEFINITIONS_CONFIG}"
+		managementDefinitionsFile=${RABBITMQ_MANAGEMENT_DEFINITIONS_CONFIG}
 		if [ -f "${managementDefinitionsFile}" ]; then
 			# see also https://github.com/docker-library/rabbitmq/pull/112#issuecomment-271485550
 			rabbitManagementConfig+=(
